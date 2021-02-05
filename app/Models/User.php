@@ -12,6 +12,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    public const error = 'incorrectly entered field data';
     protected $table = "users";
 
     /**

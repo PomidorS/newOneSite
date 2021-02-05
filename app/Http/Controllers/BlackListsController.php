@@ -29,7 +29,7 @@ class BlackListsController extends Controller {
      * @return JsonResponse
      */
     public function show(): JsonResponse {
-        return response()->json(Follower::get(), 201);
+        return response()->json(BlackList::get(), 201);
     }
 
 

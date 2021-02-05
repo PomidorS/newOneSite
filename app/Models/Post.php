@@ -11,7 +11,8 @@ class Post extends Model
 {
     use HasFactory;
 
-    protected $table = "posts";
+    public const error = 'The number of characters has been exceeded';
+    protected $table = 'posts';
 
     /**
      * @var array[]

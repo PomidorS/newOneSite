@@ -16,6 +16,13 @@ class UsersController extends Controller {
      * @return string
      */
     public function create(Request $request): string {
+        $validate_Data = $request->validate([
+            'name' => 'required|string|max:30',
+            'password' => 'required|min:6|max:40',
+            'email' => 'required|email',
+            'login' => 'required|max:12'
+        ]);
+        if(!$validate_Data) return response()->json(User::error , 400);
         $user = User::create($request->all());
         return response()->json($user,200);
 
@@ -48,6 +55,13 @@ class UsersController extends Controller {
      * @return JsonResponse
      */
     public function edit(Request $request, int $id): JsonResponse {
+        $validate_Data = $request->validate([
+            'name' => 'required|string|max:30',
+            'password' => 'required|min:6|max:40',
+            'email' => 'required|email',
+            'login' => 'required|max:12'
+        ]);
+        if(!$validate_Data) return response()->json(User::error , 400);
         $result = User::find((int) $id);
         $result->update($request->all());
         $result->save();

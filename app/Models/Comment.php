@@ -10,6 +10,7 @@ class Comment extends Model
 {
     use HasFactory;
 
+    public const error = 'The number of characters has been exceeded';
     protected $table = "comments";
 
     /**
