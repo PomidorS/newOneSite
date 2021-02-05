@@ -31,9 +31,9 @@ class CommentsController extends Controller {
      * @param $id
      * @return JsonResponse
      */
-    public function show($id): JsonResponse {
+    public function show(int $id): JsonResponse {
 
-        return response()->json(Comment::find((int) $id), 201);
+        return response()->json(Comment::find($id), 201);
     }
 
     /**
@@ -47,8 +47,8 @@ class CommentsController extends Controller {
         $validate_Data = $request->validate([
             'text' => 'required|string|max:1024 '
         ]);
-        if(!$validate_Data) return response()->json(Comment::error , 400);
-        $result = Comment::find((int) $id);
+        if(!$validate_Data) return response()->json(Comment::error, 400);
+        $result = Comment::find($id);
         $result->update($request->all());
         $result->save();
         return response()->json($result, 201);
@@ -62,7 +62,7 @@ class CommentsController extends Controller {
      * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse {
-        $result = Comment::find((int) $id);
+        $result = Comment::find($id);
         $result->delete();
         return response()->json('', 200);
     }

@@ -35,7 +35,7 @@ class PostsController extends Controller {
      * @return JsonResponse
      */
     public function show(int $id, int $quantity = 1): JsonResponse {
-        if ($quantity == $this->One) return response()->json(Post::find((int) $id), 201);
+        if ($quantity == $this->One) return response()->json(Post::find($id), 201);
         else {
             $out_post = DB::table('posts')->orderBy('id')->take($this->max_nums);//->get();
             return response()->json($out_post, 201);
@@ -54,7 +54,7 @@ class PostsController extends Controller {
             'text' => 'required|string|max:255 '
         ]);
         if(!$validate_Data) return response()->json(Post::error , 400);
-        $result = Post::find((int) $id);
+        $result = Post::find($id);
         $result->update($request->all());
         $result->save();
         return response()->json($result, 201);
@@ -68,7 +68,7 @@ class PostsController extends Controller {
      * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse {
-        $result = Post::find((int) $id);
+        $result = Post::find($id);
         $result->delete();
         return response()->json('', 200);
     }

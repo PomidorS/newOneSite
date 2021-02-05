@@ -16,7 +16,7 @@ class BlackListsController extends Controller {
      * @return JsonResponse
      */
     public function create(Request $request, int $id): JsonResponse {
-        $result = BlackList::find((int) $id);
+        $result = BlackList::find($id);
         $result->update($request->all());
         $result->save();
         return response()->json($result, 201);
@@ -41,7 +41,7 @@ class BlackListsController extends Controller {
      */
     public function destroy(int $id): JsonResponse
     {
-        $result = BlackList::find((int) $id);
+        $result = BlackList::find($id);
         $result->delete();
         return response()->json('', 200);
     }

@@ -35,8 +35,9 @@ class UsersController extends Controller {
      * @return JsonResponse
      */
     public function show(int $id): JsonResponse {
-
-        return response()->json(User::find((int) $id), 201);
+        $result = User::find($id);
+        if(!$result) return response()->json(User::error, 400);
+        return response()->json($result, 201);
     }
 
     /**
@@ -62,7 +63,7 @@ class UsersController extends Controller {
             'login' => 'required|max:12'
         ]);
         if(!$validate_Data) return response()->json(User::error , 400);
-        $result = User::find((int) $id);
+        $result = User::find($id);
         $result->update($request->all());
         $result->save();
         return response()->json($result, 201);
@@ -76,7 +77,7 @@ class UsersController extends Controller {
      * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse {
-        $result = User::find((int) $id);
+        $result = User::find($id);
         $result->delete();
         return response()->json('', 200);
     }
