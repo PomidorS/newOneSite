@@ -9,33 +9,13 @@ use Illuminate\Http\Request;
 class UsersController extends Controller {
 
     /**
-     * Show the form for creating a new resource.
-     *
-     *
-     * @param Request $request
-     * @return string
-     */
-    public function create(Request $request): string {
-        $validate_Data = $request->validate([
-            'name' => 'required|string|max:30',
-            'password' => 'required|min:6|max:40',
-            'email' => 'required|email',
-            'login' => 'required|max:12'
-        ]);
-        if(!$validate_Data) return response()->json(User::error , 400);
-        $user = User::create($request->all());
-        return response()->json($user,200);
-
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param $id
      * @return JsonResponse
      */
     public function show(int $id): JsonResponse {
-        $result = User::find($id);
+        $result = User::findOrFail($id);
         if(!$result) return response()->json(User::error, 400);
         return response()->json($result, 201);
     }
@@ -63,8 +43,8 @@ class UsersController extends Controller {
             'login' => 'required|max:12'
         ]);
         if(!$validate_Data) return response()->json(User::error , 400);
-        $result = User::find($id);
-        $result->update($request->all());
+        $result = User::findOrFail($id);
+        $result->update($request->only(['name', 'login', 'email', 'password',]));
         $result->save();
         return response()->json($result, 201);
     }
@@ -77,7 +57,7 @@ class UsersController extends Controller {
      * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse {
-        $result = User::find($id);
+        $result = User::findOrFail($id);
         $result->delete();
         return response()->json('', 200);
     }

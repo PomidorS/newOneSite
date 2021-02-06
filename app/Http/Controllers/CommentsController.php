@@ -20,7 +20,7 @@ class CommentsController extends Controller {
             'text' => 'required|string|max:1024 '
         ]);
         if(!$validate_Data) return response()->json(Comment::error , 400);
-        $comment = Comment::create($request->all());
+        $comment = Comment::create($request->only('text'));
         return response()->json($comment,200);
 
     }
@@ -33,7 +33,7 @@ class CommentsController extends Controller {
      */
     public function show(int $id): JsonResponse {
 
-        return response()->json(Comment::find($id), 201);
+        return response()->json(Comment::findOrFail($id), 201);
     }
 
     /**
@@ -48,8 +48,8 @@ class CommentsController extends Controller {
             'text' => 'required|string|max:1024 '
         ]);
         if(!$validate_Data) return response()->json(Comment::error, 400);
-        $result = Comment::find($id);
-        $result->update($request->all());
+        $result = Comment::findOrFail($id);
+        $result->update($request->only(['text']));
         $result->save();
         return response()->json($result, 201);
     }
@@ -62,7 +62,7 @@ class CommentsController extends Controller {
      * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse {
-        $result = Comment::find($id);
+        $result = Comment::findOrFail($id);
         $result->delete();
         return response()->json('', 200);
     }
