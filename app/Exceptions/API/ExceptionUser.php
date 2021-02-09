@@ -5,50 +5,58 @@ namespace App\Exceptions\API;
 
 
 use Exception;
-use Illuminate\Http\Exception\HttpResponseException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
+use Throwable;
 
-class ExceptionUser extends Exception
+class ExceptionUser extends ExceptionHandler
 {
     /**
-     * Render an exception into an HTTP response.
-     *
      * @param Request $request
-     * @param Exception $exception
-     * @return JsonResponse
+     * @param Exception $e
+     * @return JsonResponse|Response|\Symfony\Component\HttpFoundation\Response
+     * @throws Throwable
      */
-    public function render(Request $request, Exception $exception): JsonResponse
+    public function render($request, $e)
     {
         if ($request->wantsJson()) {   //add Accept: application/json in request
-            return $this->handleApiException($request, $exception);
+            return self::handleApiException($request, $e);
         } else {
-            $retval = parent::render();
+            $retval = parent::render($request, $e);
         }
 
         return $retval;
     }
 
-    private function handleApiException($request, Exception $exception)
+    /**
+     * @param $request
+     * @param Exception $exception
+     * @return JsonResponse
+     */
+    private function handleApiException($request, Exception $exception): JsonResponse
     {
         $exception = $this->prepareException($exception);
 
-        if ($exception instanceof HttpResponseException) {
-            $exception = $exception->getResponse();
-        }
-
-        if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
+        if ($exception instanceof \Illuminate\Http\Exceptions\HttpResponseException) {
+            $exception = $exception->getResponce();
+        } elseif ($exception instanceof AuthenticationException) {
             $exception = $this->unauthenticated($request, $exception);
-        }
-
-        if ($exception instanceof \Illuminate\Validation\ValidationException) {
+        } elseif ($exception instanceof ValidationException) {
             $exception = $this->convertValidationExceptionToResponse($exception, $request);
         }
 
         return $this->customApiResponse($exception);
     }
 
-    private function customApiResponse($exception)
+    /**
+     * @param $exception
+     * @return JsonResponse
+     */
+    private function customApiResponse($exception): JsonResponse
     {
         if (method_exists($exception, 'getStatusCode')) {
             $statusCode = $exception->getStatusCode();
