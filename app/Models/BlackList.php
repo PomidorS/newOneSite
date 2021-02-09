@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class BlackList extends Model
 {
     use HasFactory;
-    protected $table = "black_lists";
+    protected $table = 'blacklists';
 
     /**
      * @var array[]
@@ -23,7 +23,7 @@ class BlackList extends Model
     /**
      * @return HasOne
      */
-    public function users(): HasOne
+    public function user(): HasOne
     {
         return $this->hasOne('users');
     }

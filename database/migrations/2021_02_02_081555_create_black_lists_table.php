@@ -17,8 +17,8 @@ class CreateBlackListsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('black_list_id');
-            $table->foreign('black_list_id')->references('id')->on('black_lists');
+            $table->unsignedBigInteger('blacklist_id');
+            $table->foreign('blacklist_id')->references('id')->on('black_lists');
             $table->timestamps();
         });
     }

@@ -2,19 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
-
-    public const error = 'incorrectly entered field data';
-    protected $table = "users";
+    protected $table = 'users';
+    public const ERROR = 'incorrectly entered field data';
 
     /**
      * The attributes that are mass assignable.

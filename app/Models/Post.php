@@ -10,9 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Post extends Model
 {
     use HasFactory;
-
-    public const error = 'The number of characters has been exceeded';
     protected $table = 'posts';
+    public const ERROR = 'The number of characters has been exceeded';
 
     /**
      * @var array[]
@@ -24,14 +23,10 @@ class Post extends Model
         'comment_id'
     ];
 
-    public static function get()
-    {
-    }
-
     /**
      * @return HasMany
      */
-    public function comments(): HasMany
+    public function comment(): HasMany
     {
         return $this->hasMany('comments');
     }

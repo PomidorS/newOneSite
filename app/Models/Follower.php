@@ -9,8 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Follower extends Model
 {
     use HasFactory;
-
-    protected $table = "followers";
+    protected $table = 'followers';
 
     /**
      * @var array[]
@@ -24,7 +23,7 @@ class Follower extends Model
     /**
      * @return HasOne
      */
-    public function users(): HasOne
+    public function user(): HasOne
     {
         return $this->hasOne('users');
     }
