@@ -10,6 +10,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 
@@ -42,7 +43,7 @@ class ExceptionUser extends ExceptionHandler
         $exception = $this->prepareException($exception);
 
         if ($exception instanceof \Illuminate\Http\Exceptions\HttpResponseException) {
-            $exception = $exception->getResponce();
+            $exception = $exception->getResponse();
         } elseif ($exception instanceof AuthenticationException) {
             $exception = $this->unauthenticated($request, $exception);
         } elseif ($exception instanceof ValidationException) {

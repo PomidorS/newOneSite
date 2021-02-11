@@ -17,7 +17,8 @@ class BlackList extends Model
     protected $fillable = [
         'id',
         'user_id',
-        'BlackList_id'
+        'BlackList_id',
+        'message'
     ];
 
     /**

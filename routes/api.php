@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
 use App\Http\Controllers\PostsController;
@@ -17,7 +18,6 @@ use App\Http\Controllers\PostsController;
 |
 */
 
-
 /**
  * маршруты аутентификации
  */
@@ -28,14 +28,14 @@ Route::post('logout', 'Auth\LoginController@logout');
 /**
  * маршруты регистрации
  */
-Route::get('register',  'Auth\RegisterController@showRegistrationForm')
-    ->name('register');
-Route::post('register', 'Auth\RegisterController@register');
+Route::get('/register',  'Auth\RegisterController@showRegistrationForm')
+    ->name('/register');
+Route::post('/register', 'Auth\RegisterController@register');
 
 /**
  * защищенный доступ к основыным действиям
  */
-Route::middleware('/auth:api')->group(function () {
+Route::middleware('auth')->group(function () {
 
     /**
      * маршруты сброса пароля
@@ -56,7 +56,7 @@ Route::middleware('/auth:api')->group(function () {
     Route::prefix('user')->group(function () {
         Route::put('/{user}', 'UsersController@edit')
             ->where('id', '[0-9]+');
-        Route::get('/show', 'UsersController@show');
+        Route::get('/{user_id:[0-9]+}/show', 'UsersController@show');
         Route::get('/profile', 'UsersController@showMe');
         Route::delete('/{user}', 'UsersController@destroy')
             ->where('id', '[0-9]+');
@@ -66,7 +66,7 @@ Route::middleware('/auth:api')->group(function () {
      * Followers Routes
      */
     Route::prefix('follower')->group(function () {
-        Route::post('/{follower}', 'FollowersController@create')
+        Route::post('/{user_id:[0-9]+}/{follower}', 'FollowersController@create')
             ->where('id', '[0-9]+');
         Route::get('/show', 'FollowersController@show');
         Route::delete('/{follower}', 'FollowersController@destroy')
@@ -77,25 +77,24 @@ Route::middleware('/auth:api')->group(function () {
      * Posts Routes
      */
     Route::prefix('posts')->group(function () {
-        Route::post('/create', 'PostsController@create');
-        Route::put('/{posts}', 'PostsController@edit')
+        Route::post('/{user_id:[0-9]+}/create', 'PostsController@create');
+        Route::put('/{user_id:[0-9]+}/{posts}', 'PostsController@edit')
             ->where('id', '[0-9]+');
-        Route::get('/{posts}/{quantity}', 'PostsController@show')
+        Route::get('/{user_id:[0-9]+}/{posts}/{quantity}', 'PostsController@show')
             ->where('id', '[0-9]+');
-        Route::delete('/{posts}', 'PostsController@destroy')
-            ->where('id', '[0-9]+');
+        Route::delete('/{user_id:[0-9]+}/{posts:[0-9]+}', 'PostsController@destroy');
     });
 
     /**
      * Comments Routes
      */
     Route::prefix('comment')->group(function () {
-        Route::post('/create', 'CommentsController@create');
-        Route::put('/{comment}', 'CommentsController@edit')
+        Route::post('/{user_id:[0-9]+}/create', 'CommentsController@create');
+        Route::put('/{user_id:[0-9]+}/{comment}', 'CommentsController@edit')
             ->where('id', '[0-9]+');
-        Route::get('/{comment}', 'CommentsController@show')
+        Route::get('/{user_id:[0-9]+}/{comment}', 'CommentsController@show')
             ->where('id', '[0-9]+');
-        Route::delete('/{comment}', 'CommentsController@destroy')
+        Route::delete('/{user_id:[0-9]+}/{comment}', 'CommentsController@destroy')
             ->where('id', '[0-9]+');
     });
 

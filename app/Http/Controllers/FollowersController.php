@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\API\BlacklistSearch;
+use App\Http\Requests\RequestBlackList;
+use App\Http\Requests\RequestFollower;
 use App\Models\Follower;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class FollowersController extends Controller
 {
@@ -13,12 +16,14 @@ class FollowersController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param Request $request
+     * @param RequestFollower $request
      * @param Follower $follower
+     * @param User $user_id
      * @return JsonResponse
      */
-    public function create(Request $request, Follower $follower): JsonResponse
+    public function create(RequestFollower $request, Follower $follower, User $user_id): JsonResponse
     {
+        BlacklistSearch::userInBlackList((int)$user_id);
         $result = Follower::query()->findOrFail($follower);
         $result->update($request->all());
         $result->save();

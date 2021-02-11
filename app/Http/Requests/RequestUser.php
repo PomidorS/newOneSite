@@ -21,7 +21,7 @@ class RequestUser extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'required|string|max:30',
@@ -30,8 +30,10 @@ class RequestUser extends FormRequest
         ];
     }
 
-
-    public function messages()
+    /**
+     * @return string[]
+     */
+    public function messages(): array
     {
         return [
             'name.required' => 'поле name должно содержать максимум 30 символов',

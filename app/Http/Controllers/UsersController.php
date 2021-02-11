@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\API\BlacklistSearch;
+use App\Exceptions\API\UserCreator;
+use App\Http\Requests\RequestUser;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
@@ -14,10 +16,12 @@ class UsersController extends Controller
      * Display the specified resource.
      *
      * @param User $user
+     * @param User $user_id
      * @return JsonResponse
      */
-    public function show(User $user): JsonResponse
+    public function show(User $user, User $user_id): JsonResponse
     {
+        BlacklistSearch::userInBlackList((int)$user_id);
         $result = User::query()->findOrFail($user);
         if (!$result) return response()->json(User::ERROR, 400);
         return response()->json($result, 201);
@@ -34,18 +38,12 @@ class UsersController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Request $request
+     * @param RequestUser $request
      * @param User $user
      * @return JsonResponse
      */
-    public function edit(Request $request, User $user): JsonResponse
+    public function edit(RequestUser $request, User $user): JsonResponse
     {
-        $validate_Data = $request->validate([
-            'name' => 'required|string|max:30',
-            'password' => 'required|min:6|max:40',
-            'email' => 'required|email'
-        ]);
-        if (!$validate_Data) return response()->json(User::ERROR, 400);
         $result = User::query()->findOrFail($user);
         $result->update($request->only(['name', 'email', 'password']));
         $result->save();

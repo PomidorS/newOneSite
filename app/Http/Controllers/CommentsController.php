@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\API\BlacklistSearch;
+use App\Exceptions\API\UserCreator;
+use App\Http\Requests\RequestComment;
 use App\Models\Comment;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class CommentsController extends Controller
 {
@@ -13,18 +16,13 @@ class CommentsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param Request $request
+     * @param RequestComment $request
+     * @param User $user_id
      * @return string
      */
-    public function create(Request $request): string
+    public function create(RequestComment $request, User $user_id): string
     {
-        $validate_Data = $request->validate([
-            'text' => 'required|string|max:1024 '
-        ]);
-        if (!$validate_Data) {
-            return response()->json(Comment::ERROR, 400);
-        }
-
+        BlacklistSearch::userInBlackList((int)$user_id);
         $comment = Comment::query()->create($request->only('text'));
         return response()->json($comment, 200);
 
@@ -34,30 +32,26 @@ class CommentsController extends Controller
      * Display the specified resource.
      *
      * @param Comment $comment
+     * @param User $user_id
      * @return JsonResponse
      */
-    public function show(Comment $comment): JsonResponse
+    public function show(Comment $comment, User $user_id): JsonResponse
     {
-
+        BlacklistSearch::userInBlackList((int)$user_id);
         return response()->json(Comment::query()->findOrFail($comment), 201);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Request $request
+     * @param RequestComment $request
      * @param Comment $comment
+     * @param User $user_id
      * @return JsonResponse
      */
-    public function edit(Request $request, Comment $comment): JsonResponse
+    public function edit(RequestComment $request, Comment $comment, User $user_id): JsonResponse
     {
-        $validate_Data = $request->validate([
-            'text' => 'required|string|max:1024 '
-        ]);
-        if (!$validate_Data) {
-            return response()->json(Comment::ERROR, 400);
-        }
-
+        UserCreator::creatorComment((int)$user_id);
         $result = Comment::query()->findOrFail($comment);
         $result->update($request->only(['text']));
         $result->save();
@@ -69,11 +63,13 @@ class CommentsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Comment $comment
+     * @param User $user_id
      * @return JsonResponse
      * @throws Exception
      */
-    public function destroy(Comment $comment): JsonResponse
+    public function destroy(Comment $comment, User $user_id): JsonResponse
     {
+        UserCreator::creatorComment((int)$user_id);
         $result = Comment::query()->findOrFail($comment);
         $result->delete();
         return response()->json('', 200);

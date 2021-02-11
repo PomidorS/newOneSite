@@ -2,11 +2,8 @@
 
 namespace App\Exceptions;
 
-use Exception;
+
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Throwable;
 
 

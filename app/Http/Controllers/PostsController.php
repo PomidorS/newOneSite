@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\API\BlacklistSearch;
+use App\Exceptions\API\UserCreator;
+use App\Http\Requests\RequestPost;
 use App\Models\Post;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PostsController extends Controller
@@ -16,32 +19,28 @@ class PostsController extends Controller
      * Show the form for creating a new resource.
      *
      *
-     * @param Request $request
+     * @param RequestPost $request
+     * @param User $user_id
      * @return string
      */
-    public function create(Request $request): string
+    public function create(RequestPost $request, User $user_id): string
     {
-        $validate_Data = $request->validate([
-            'text' => 'required|string|max:255 '
-        ]);
-        if (!$validate_Data) {
-            return response()->json(Post::ERROR, 400);
-        }
-
+        BlacklistSearch::userInBlackList((int)$user_id);
         $post = Post::query()->create($request->only(['text']));
         return response()->json(Post::query()->findOrFail($post['id']), 201);
-
     }
 
     /**
      * Display the specified resource.
      *
+     * @param User $user_id
      * @param Post $post
      * @param int $quantity
      * @return JsonResponse
      */
-    public function show(Post $post, int $quantity = 1): JsonResponse
+    public function show(User $user_id, Post $post, int $quantity = 1): JsonResponse
     {
+        BlacklistSearch::userInBlackList((int)$user_id);
         if ($quantity == $this->one) {
             return response()->json(Post::query()->findOrFail($post), 201);
         } else {
@@ -55,19 +54,14 @@ class PostsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Request $request
+     * @param RequestPost $request
      * @param Post $post
+     * @param User $user_id
      * @return JsonResponse
      */
-    public function edit(Request $request, Post $post): JsonResponse
+    public function edit(RequestPost $request, Post $post, User $user_id): JsonResponse
     {
-        $validate_Data = $request->validate([
-            'text' => 'required|string|max:255'
-        ]);
-        if (!$validate_Data) {
-            return response()->json(Post::ERROR, 400);
-        }
-
+        UserCreator::creatorPost((int)$user_id);
         $result = Post::query()->findOrFail($post);
         $result->update($request->only(['text']));
         $result->save();
@@ -78,12 +72,14 @@ class PostsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param User $user_id
      * @param Post $post
      * @return JsonResponse
      * @throws Exception
      */
-    public function destroy(Post $post): JsonResponse
+    public function destroy(User $user_id, Post $post): JsonResponse
     {
+        UserCreator::creatorPost((int)$user_id);
         $result = Post::query()->findOrFail($post);
         $result->delete();
         return response()->json('', 200);
