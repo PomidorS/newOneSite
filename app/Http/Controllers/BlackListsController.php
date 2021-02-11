@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RequestBlackList;
 use App\Models\BlackList;
 use Illuminate\Http\JsonResponse;
 
@@ -12,14 +11,14 @@ class BlackListsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param RequestBlackList $request
      * @param BlackList $blacklist
      * @return JsonResponse
      */
-    public function create(RequestBlackList $request, BlackList $blacklist): JsonResponse
+    public function create(BlackList $blacklist): JsonResponse
     {
-        $BlackLists = BlackList::query()->findOrFail($blacklist);
-        $BlackLists->update($request->all());
+        BlackList::query()->findOrFail($blacklist);
+        $BlackLists = new BlackList;
+        $BlackLists->update();
         $BlackLists->save();
         return response()->json($BlackLists, 201);
 

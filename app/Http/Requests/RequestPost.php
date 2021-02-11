@@ -32,7 +32,9 @@ class RequestPost extends FormRequest
     public function messages(): array
     {
         return [
-            'text' => 'текст в посте должен содержать максимум 255 символов '
+            'text.required' => 'текст в посте должен быть заполнен, для его создания. ',
+            'text.max' => 'текст в посте должен содержать максимум 255 символов.',
+            'text.string' => 'текст в посте является строкой.'
         ];
     }
 }

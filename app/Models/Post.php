@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Post extends Model
 {
     use HasFactory;
+
     protected $table = 'posts';
     public const ERROR = 'The number of characters has been exceeded';
 

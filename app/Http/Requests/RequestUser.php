@@ -11,7 +11,7 @@ class RequestUser extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return false;
     }
@@ -25,7 +25,7 @@ class RequestUser extends FormRequest
     {
         return [
             'name' => 'required|string|max:30',
-            'password' => 'required|min:6|max:40',
+            'password' => 'required|string|min:6|max:40',
             'email' => 'required|email'
         ];
     }
@@ -36,9 +36,17 @@ class RequestUser extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'поле name должно содержать максимум 30 символов',
-            'password.required' => 'поле password должно содержать минимум 6 и максимум 40 символов',
-            'email.required' => 'некорректный email'
+            'name.required' => 'поле name должно быть заполнено.',
+            'name.max' => 'поле name должно содержать максимум 30 символов.',
+            'name.string' => 'поле name является строкой.',
+
+            'password.required' => 'поле password должно быть заполнено.',
+            'password.min' => 'поле password должно содержать минимум 6 символов.',
+            'password.max' => 'поле password должно содержать максимум 40 символов.',
+            'password.string' => 'поле password является строкой.',
+
+            'email.required' => 'некорректный email.',
+            'email.string' => 'поле email является строкой.'
         ];
     }
 }

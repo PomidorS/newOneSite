@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\API\BlacklistSearch;
-use App\Exceptions\API\UserCreator;
 use App\Http\Requests\RequestPost;
 use App\Models\Post;
 use App\Models\User;
+use App\Services\BlacklistService;
+use App\Services\UserCreatorService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +25,7 @@ class PostsController extends Controller
      */
     public function create(RequestPost $request, User $user_id): string
     {
-        BlacklistSearch::userInBlackList((int)$user_id);
+        BlacklistService::userInBlackList((int)$user_id);
         $post = Post::query()->create($request->only(['text']));
         return response()->json(Post::query()->findOrFail($post['id']), 201);
     }
@@ -40,7 +40,7 @@ class PostsController extends Controller
      */
     public function show(User $user_id, Post $post, int $quantity = 1): JsonResponse
     {
-        BlacklistSearch::userInBlackList((int)$user_id);
+        BlacklistService::userInBlackList((int)$user_id);
         if ($quantity == $this->one) {
             return response()->json(Post::query()->findOrFail($post), 201);
         } else {
@@ -61,7 +61,7 @@ class PostsController extends Controller
      */
     public function edit(RequestPost $request, Post $post, User $user_id): JsonResponse
     {
-        UserCreator::creatorPost((int)$user_id);
+        UserCreatorService::creatorPost((int)$user_id);
         $result = Post::query()->findOrFail($post);
         $result->update($request->only(['text']));
         $result->save();
@@ -79,7 +79,7 @@ class PostsController extends Controller
      */
     public function destroy(User $user_id, Post $post): JsonResponse
     {
-        UserCreator::creatorPost((int)$user_id);
+        UserCreatorService::creatorPost((int)$user_id);
         $result = Post::query()->findOrFail($post);
         $result->delete();
         return response()->json('', 200);

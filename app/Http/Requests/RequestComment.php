@@ -32,7 +32,9 @@ class RequestComment extends FormRequest
     public function messages(): array
     {
         return [
-            'text' => 'текст комментария должен содержать максимум 1024 символа '
+            'text.required' => 'текст комментария должен быть заполнен, для его создания. ',
+            'text.max' => 'текст комментария должен содержать максимум 1024 символа.',
+            'text.string' => 'текст комментария является строкой.'
         ];
     }
 }

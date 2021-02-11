@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\API\BlacklistSearch;
-use App\Exceptions\API\UserCreator;
 use App\Http\Requests\RequestComment;
 use App\Models\Comment;
 use App\Models\User;
+use App\Services\BlacklistService;
+use App\Services\UserCreatorService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -22,7 +22,7 @@ class CommentsController extends Controller
      */
     public function create(RequestComment $request, User $user_id): string
     {
-        BlacklistSearch::userInBlackList((int)$user_id);
+        BlacklistService::userInBlackList((int)$user_id);
         $comment = Comment::query()->create($request->only('text'));
         return response()->json($comment, 200);
 
@@ -37,7 +37,7 @@ class CommentsController extends Controller
      */
     public function show(Comment $comment, User $user_id): JsonResponse
     {
-        BlacklistSearch::userInBlackList((int)$user_id);
+        BlacklistService::userInBlackList((int)$user_id);
         return response()->json(Comment::query()->findOrFail($comment), 201);
     }
 
@@ -51,7 +51,7 @@ class CommentsController extends Controller
      */
     public function edit(RequestComment $request, Comment $comment, User $user_id): JsonResponse
     {
-        UserCreator::creatorComment((int)$user_id);
+        UserCreatorService::creatorComment((int)$user_id);
         $result = Comment::query()->findOrFail($comment);
         $result->update($request->only(['text']));
         $result->save();
@@ -69,7 +69,7 @@ class CommentsController extends Controller
      */
     public function destroy(Comment $comment, User $user_id): JsonResponse
     {
-        UserCreator::creatorComment((int)$user_id);
+        UserCreatorService::creatorComment((int)$user_id);
         $result = Comment::query()->findOrFail($comment);
         $result->delete();
         return response()->json('', 200);

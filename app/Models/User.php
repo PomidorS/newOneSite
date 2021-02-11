@@ -11,6 +11,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+
     protected $table = 'users';
     public const ERROR = 'incorrectly entered field data';
 
@@ -59,7 +60,7 @@ class User extends Authenticatable
         return $this->hasMany('posts');
     }
 
-    public function BlackList(): HasMany
+    public function blackList(): HasMany
     {
         return $this->hasMany('black_lists');
     }

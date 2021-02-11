@@ -1,13 +1,13 @@
 <?php
 
 
-namespace App\Exceptions\API;
+namespace App\Services;
 
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
-class BlacklistSearch
+class BlacklistService
 {
     /**
      * @param int $user_id
@@ -22,4 +22,5 @@ class BlacklistSearch
             return true;
         }
     }
+
 }

@@ -21,14 +21,14 @@ use App\Http\Controllers\PostsController;
 /**
  * маршруты аутентификации
  */
-Route::get('login',  'Auth\LoginController@showLoginForm')->name('login');
+Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout');
 
 /**
  * маршруты регистрации
  */
-Route::get('/register',  'Auth\RegisterController@showRegistrationForm')
+Route::get('/register', 'Auth\RegisterController@showRegistrationForm')
     ->name('/register');
 Route::post('/register', 'Auth\RegisterController@register');
 
@@ -55,47 +55,51 @@ Route::middleware('auth')->group(function () {
      */
     Route::prefix('user')->group(function () {
         Route::put('/{user}', 'UsersController@edit')
-            ->where('id', '[0-9]+');
-        Route::get('/{user_id:[0-9]+}/show', 'UsersController@show');
+            ->where('user', '[0-9]+');
+        Route::get('/{user_id}/show', 'UsersController@show')
+            ->where('user_id', '[0-9]+');
         Route::get('/profile', 'UsersController@showMe');
         Route::delete('/{user}', 'UsersController@destroy')
-            ->where('id', '[0-9]+');
+            ->where('user', '[0-9]+');
     });
 
     /**
      * Followers Routes
      */
     Route::prefix('follower')->group(function () {
-        Route::post('/{user_id:[0-9]+}/{follower}', 'FollowersController@create')
-            ->where('id', '[0-9]+');
+        Route::post('/{user_id}/{follower}', 'FollowersController@create')
+            ->where(['user_id', 'follower'], '[0-9]+');
         Route::get('/show', 'FollowersController@show');
         Route::delete('/{follower}', 'FollowersController@destroy')
-            ->where('id', '[0-9]+');
+            ->where('follower', '[0-9]+');
     });
 
     /**
      * Posts Routes
      */
     Route::prefix('posts')->group(function () {
-        Route::post('/{user_id:[0-9]+}/create', 'PostsController@create');
-        Route::put('/{user_id:[0-9]+}/{posts}', 'PostsController@edit')
-            ->where('id', '[0-9]+');
-        Route::get('/{user_id:[0-9]+}/{posts}/{quantity}', 'PostsController@show')
-            ->where('id', '[0-9]+');
-        Route::delete('/{user_id:[0-9]+}/{posts:[0-9]+}', 'PostsController@destroy');
+        Route::post('/{user_id}/create', 'PostsController@create')
+            ->where('user_id', '[0-9]+');
+        Route::put('/{user_id}/{posts}', 'PostsController@edit')
+            ->where(['user_id', 'posts'], '[0-9]+');
+        Route::get('/{user_id}/{posts}/{quantity}', 'PostsController@show')
+            ->where(['user_id', 'posts', 'quantity'], '[0-9]+');
+        Route::delete('/{user_id}/{posts}', 'PostsController@destroy')
+            ->where(['user_id', 'posts'], '[0-9]+');
     });
 
     /**
      * Comments Routes
      */
     Route::prefix('comment')->group(function () {
-        Route::post('/{user_id:[0-9]+}/create', 'CommentsController@create');
-        Route::put('/{user_id:[0-9]+}/{comment}', 'CommentsController@edit')
-            ->where('id', '[0-9]+');
-        Route::get('/{user_id:[0-9]+}/{comment}', 'CommentsController@show')
-            ->where('id', '[0-9]+');
-        Route::delete('/{user_id:[0-9]+}/{comment}', 'CommentsController@destroy')
-            ->where('id', '[0-9]+');
+        Route::post('/{user_id}/create', 'CommentsController@create')
+            ->where('user_id', '[0-9]+');
+        Route::put('/{user_id}/{comment}', 'CommentsController@edit')
+            ->where(['user_id', 'comment'], '[0-9]+');
+        Route::get('/{user_id}/{comment}', 'CommentsController@show')
+            ->where(['user_id', 'comment'], '[0-9]+');
+        Route::delete('/{user_id}/{comment}', 'CommentsController@destroy')
+            ->where(['user_id', 'comment'], '[0-9]+');
     });
 
     /**
@@ -103,9 +107,9 @@ Route::middleware('auth')->group(function () {
      */
     Route::prefix('black_lists')->group(function () {
         Route::post('/{blacklist}', 'BlackListsController@create')
-            ->where('id', '[0-9]+');
+            ->where('blacklist', '[0-9]+');
         Route::get('/show', 'BlackListsController@show');
         Route::delete('/{blacklist}', 'BlackListsController@destroy')
-            ->where('id', '[0-9]+');
+            ->where('blacklist', '[0-9]+');
     });
 });

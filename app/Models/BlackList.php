@@ -9,16 +9,20 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class BlackList extends Model
 {
     use HasFactory;
+
     protected $table = 'blacklists';
 
     /**
+     * property black_list_id
+     * property user_id
+     * property message
+     *
      * @var array[]
      */
     protected $fillable = [
         'id',
         'user_id',
-        'BlackList_id',
-        'message'
+        'blacklist_id',
     ];
 
     /**

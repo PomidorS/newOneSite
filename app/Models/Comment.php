@@ -9,10 +9,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Comment extends Model
 {
     use HasFactory;
+
     protected $table = 'comments';
     public const ERROR = 'The number of characters has been exceeded';
 
     /**
+     * property text
+     *
      * @var array[]
      */
     protected $fillable = [

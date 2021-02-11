@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\API\BlacklistSearch;
-use App\Exceptions\API\UserCreator;
 use App\Http\Requests\RequestUser;
 use App\Models\User;
+use App\Services\BlacklistService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -21,7 +20,7 @@ class UsersController extends Controller
      */
     public function show(User $user, User $user_id): JsonResponse
     {
-        BlacklistSearch::userInBlackList((int)$user_id);
+        BlacklistService::userInBlackList((int)$user_id);
         $result = User::query()->findOrFail($user);
         if (!$result) return response()->json(User::ERROR, 400);
         return response()->json($result, 201);

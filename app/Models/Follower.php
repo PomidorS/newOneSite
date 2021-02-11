@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Follower extends Model
 {
     use HasFactory;
+
     protected $table = 'followers';
 
     /**
@@ -17,8 +18,7 @@ class Follower extends Model
     protected $fillable = [
         'id',
         'user_id',
-        'follower_id',
-        'message'
+        'follower_id'
     ];
 
     /**
