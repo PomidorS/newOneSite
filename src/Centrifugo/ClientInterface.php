@@ -13,7 +13,7 @@ interface ClientInterface
      *
      * @return Response
      */
-    public function sendRequest(Request $request);
+    public function sendRequest(Request $request): Response;
 
     /**
      * @param BatchRequest $request

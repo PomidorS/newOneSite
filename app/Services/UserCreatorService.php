@@ -4,6 +4,7 @@
 namespace App\Services;
 
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
@@ -17,9 +18,7 @@ class UserCreatorService
     {
         $postUser = DB::table('posts')->select('user_id')->find($user_id);
         if (!$postUser) {
-            return response()->json('вы не являетесь создателем.', 200);
-        } else {
-            return true;
+            throw new ModelNotFoundException('вы не являетесь создателем.');
         }
     }
 
@@ -31,9 +30,7 @@ class UserCreatorService
     {
         $postUser = DB::table('comments')->select('user_id')->find($user_id);
         if (!$postUser) {
-            return response()->json('вы не являетесь создателем.', 200);
-        } else {
-            return true;
+            throw new ModelNotFoundException('вы не являетесь создателем.');
         }
     }
 }
