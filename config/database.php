@@ -119,6 +119,12 @@ return [
 
     'redis' => [
 
+        'driver' => 'redis',
+        'connection' => 'default',
+        'queue' => '{default}',
+        'retry_after' => 90,
+        'block_for' => 5,
+
         'client' => env('REDIS_CLIENT', 'phpredis'),
 
         'options' => [
@@ -132,6 +138,7 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_DB', '0'),
+            'read_timeout' => 60,
         ],
 
         'cache' => [

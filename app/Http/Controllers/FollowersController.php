@@ -21,7 +21,6 @@ class FollowersController extends Controller
     public function create(Follower $follower, User $user_id): JsonResponse
     {
         BlacklistService::userInBlackList((int)$user_id);
-        Follower::query()->findOrFail($follower);
         $result = new Follower;
         $result->update();
         $result->save();

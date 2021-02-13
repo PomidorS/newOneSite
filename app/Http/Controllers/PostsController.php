@@ -10,6 +10,7 @@ use App\Services\UserCreatorService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\Filters\StringFilter;
 
 class PostsController extends Controller
 {
@@ -26,7 +27,8 @@ class PostsController extends Controller
     public function create(RequestPost $request, User $user_id): string
     {
         BlacklistService::userInBlackList((int)$user_id);
-        $post = Post::query()->create($request->only(['text']));
+        $textPost = (new StringFilter)->keepNumbersAndLettersOnly((string)$request->only(['text']));
+        $post = Post::query()->create(['text' => $textPost]);
         return response()->json(Post::query()->findOrFail($post['id']), 201);
     }
 

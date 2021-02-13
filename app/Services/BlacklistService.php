@@ -1,9 +1,8 @@
 <?php
 
-
 namespace App\Services;
 
-
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
@@ -17,9 +16,7 @@ class BlacklistService
     {
         $inBlackList = DB::table('black_lists')->select('blacklist_id')->find($user_id);
         if (!$inBlackList) {
-            return response()->json('вы в черном списке.', 200);
-        } else {
-            return true;
+            throw new ModelNotFoundException('Вы в черном списке. ');
         }
     }
 
