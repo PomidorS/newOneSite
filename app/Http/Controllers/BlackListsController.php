@@ -16,11 +16,10 @@ class BlackListsController extends Controller
      */
     public function create(BlackList $blacklist): JsonResponse
     {
-        BlackList::query()->findOrFail($blacklist);
-        $BlackLists = new BlackList;
-        $BlackLists->update();
-        $BlackLists->save();
-        return response()->json($BlackLists, 201);
+        $blackLists = new BlackList;
+        $blackLists->update();
+        $blackLists->save();
+        return response()->json($blackLists, 201);
 
     }
 
